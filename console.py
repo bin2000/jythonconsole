@@ -34,8 +34,10 @@ except NameError:
     (True, False) = (1, 0)
 
 class Console:
-    PROMPT = sys.ps1
-    PROCESS = sys.ps2
+    # PROMPT = sys.ps1
+    # PROCESS = sys.ps2
+    PROMPT = ">>> "
+    PROCESS = "... "
     BANNER = ["Jython Completion Shell", InteractiveConsole.getDefaultBanner()]
   
     include_single_underscore_methods = False

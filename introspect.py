@@ -17,6 +17,8 @@ import sys
 import tokenize
 import types
 
+PROCESS = "... "
+
 try:
     True
 except NameError:
@@ -209,8 +211,8 @@ def getRoot(command, terminator=None):
     '.'. The terminator and anything after the terminator will be
     dropped."""
     command = command.split('\n')[-1]
-    if command.startswith(sys.ps2):
-        command = command[len(sys.ps2):]
+    if command.startswith(PROCESS):
+        command = command[len(PROCESS):]
     command = command.lstrip()
     command = rtrimTerminus(command, terminator)
     tokens = getTokens(command)
