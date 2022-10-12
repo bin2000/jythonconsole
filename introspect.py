@@ -60,7 +60,7 @@ def getAttributeNames(object, includeMagic=1, includeSingle=1,
         try: attributes += object._getAttributeNames()
         except: pass
     # Get all attribute names.
-    attrdict = getAllAttributeNames(object)
+    attrdict = getAllAttributeNames(object, {})
     for attrlist in attrdict.values():
         attributes += attrlist
     # Remove duplicates from the attribute list.
@@ -81,12 +81,25 @@ def getAttributeNames(object, includeMagic=1, includeSingle=1,
 def hasattrAlwaysReturnsTrue(object):
     return hasattr(object, 'bogu5_123_aTTri8ute')
 
-def getAllAttributeNames(object):
+def getAllAttributeNames(object, visited_ids={}):
     """Return dict of all attributes, including inherited, for an object.
     
     Recursively walk through a class and all base classes.
     """
     attrdict = {}  # (object, technique, count): [list of attributes]
+
+    # return if this object id has been visited
+    try:
+        # track by id if it's an object
+        visit_id = id(object)
+    except:
+        # track by type if it's not an object
+        visit_id = type(object)
+    if visit_id in visited_ids:
+        #return attrdict
+        pass
+    visited_ids[visit_id] = 1
+
     # !!!
     # Do Not use hasattr() as a test anywhere in this function,
     # because it is unreliable with remote objects: xmlrpc, soap, etc.
@@ -124,7 +137,7 @@ def getAllAttributeNames(object):
             # classes.
             pass
         else:
-            attrdict.update(getAllAttributeNames(klass))
+            attrdict.update(getAllAttributeNames(klass, visited_ids))
     # Also get attributes from any and all parent classes.
     try:
         bases = object.__bases__
@@ -140,7 +153,7 @@ def getAllAttributeNames(object):
                     # Break a circular reference. Happens in Jython 2.2b1.
                     pass    
                 else:
-                    attrdict.update(getAllAttributeNames(base))
+                    attrdict.update(getAllAttributeNames(base, visited_ids))
     return attrdict
 
 def getCallTip(command='', locals=None):
