@@ -302,10 +302,14 @@ def ispython25(object):
 
 # Dynamically assign the version of ispython
 # To deal with differences between Jython 2.1, 2.2 and 2.5
-if sys.version == '2.1':
-    ispython = ispython21
+# 2.7 is most recent jython version as of now
+if sys.version.startswith('2.7'):
+    # assume 2.5 is close to 2.7 for now
+    ispython = ispython25
 elif sys.version.startswith('2.5'):
     ispython = ispython25
+elif sys.version.startswith('2.1'):
+    ispython = ispython21
 else:
     ispython = ispython22
     
